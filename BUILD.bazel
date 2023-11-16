@@ -1,0 +1,26 @@
+load("@rules_rust//rust:defs.bzl", "rust_library")
+load("//:write_rs.bzl", "write_rs")
+
+rust_library(
+    name = "include_str",
+    srcs = ["lib.rs"],
+    compile_data = ["test.txt"],
+)
+
+write_rs(name = "lib2.rs")
+
+rust_library(
+    name = "gen_code",
+    srcs = [
+        ":lib2.rs",
+    ],
+)
+
+rust_library(
+    name = "include_str_with_gen_code",
+    srcs = [
+        "lib.rs",
+        "lib2.rs",
+    ],
+    compile_data = ["test.txt"],
+)
